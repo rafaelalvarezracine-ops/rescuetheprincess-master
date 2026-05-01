@@ -16,6 +16,9 @@ public class Gameboard extends Application {
     private static final int COLS = 10;
     private static final int SCENE_WIDTH = 800;
     private static final int SCENE_HEIGHT = 800;
+    private int playerRow = 1;
+    private int playerCol = 1;
+    private GridPane grid = new GridPane();
 
     enum CellType {
         GRASS, PLAYER, PRINCESS, BOMB, WALL
@@ -27,7 +30,7 @@ public class Gameboard extends Application {
     public void start(Stage stage) {
         initMatrix();
 
-        GridPane grid = new GridPane();
+        grid = new GridPane();
         grid.setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
         drawBoard(grid);
 
@@ -38,6 +41,17 @@ public class Gameboard extends Application {
         stage.setTitle("Rescue the Princess");
         stage.setScene(scene);
         stage.show();
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case DOWN -> movePlayer(1, 0);
+                case RIGHT -> movePlayer(0, 1);
+                case LEFT -> movePlayer(0, -1);
+                case UP -> movePlayer(-1, 0);
+
+
+            }
+
+        });
     }
 
     private void initMatrix() {
@@ -70,6 +84,21 @@ public class Gameboard extends Application {
                 placed++;
             }
         }
+    }
+    private void movePlayer(int rowChange, int colChange) {
+        int newRow = playerRow + rowChange;
+        int newCol = playerCol + colChange;
+
+        // Stop if hitting a wall
+        if (matrix[newRow][newCol] == CellType.WALL) return;
+
+        // Move the player
+        matrix[playerRow][playerCol] = CellType.GRASS;
+        playerRow = newRow;
+        playerCol = newCol;
+        matrix[playerRow][playerCol] = CellType.PLAYER;
+
+        drawBoard(grid);
     }
 
     private void drawBoard(GridPane grid) {
