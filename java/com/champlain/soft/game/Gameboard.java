@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.util.Random;
+import javafx.scene.control.Alert;
 
 public class Gameboard extends Application {
 
@@ -91,6 +92,16 @@ public class Gameboard extends Application {
 
         // Stop if hitting a wall
         if (matrix[newRow][newCol] == CellType.WALL) return;
+
+        // Win condition - reached the princess
+        if (matrix[newRow][newCol] == CellType.PRINCESS) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Victory");
+            alert.setHeaderText(null);
+            alert.setContentText("You rescued the princess!");
+            alert.showAndWait();
+            return;
+        }
 
         // Move the player
         matrix[playerRow][playerCol] = CellType.GRASS;
