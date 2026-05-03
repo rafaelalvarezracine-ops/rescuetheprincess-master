@@ -101,18 +101,38 @@ public class Gameboard extends Application {
             alert.setHeaderText(null);
             alert.setContentText("You rescued the princess!");
             alert.showAndWait();
+            initMatrix();
+            lives = 3;
+            playerRow = 1;
+            playerCol = 1;
+            drawBoard(grid);
             return;
         }
 
         // Bomb condition
         if (matrix[newRow][newCol] == CellType.BOMB) {
             lives--;
+            matrix[newRow][newCol] = CellType.GRASS;
+
+            if (lives <= 0) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Game Over");
+                alert.setHeaderText(null);
+                alert.setContentText("You ran out of lives! Game over!");
+                alert.showAndWait();
+                initMatrix();
+                lives = 3;
+                playerRow = 1;
+                playerCol = 1;
+                drawBoard(grid);
+                return;
+            }
+
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Boom");
             alert.setHeaderText(null);
             alert.setContentText("You hit a bomb! Lives left: " + lives);
             alert.showAndWait();
-            matrix[newRow][newCol] = CellType.GRASS;
         }
 
         // Move the player
@@ -123,7 +143,6 @@ public class Gameboard extends Application {
 
         drawBoard(grid);
     }
-
     private void drawBoard(GridPane grid) {
         grid.getChildren().clear();
 
