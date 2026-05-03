@@ -19,6 +19,7 @@ public class Gameboard extends Application {
     private static final int SCENE_HEIGHT = 800;
     private int playerRow = 1;
     private int playerCol = 1;
+    private int lives = 3;
     private GridPane grid = new GridPane();
 
     enum CellType {
@@ -101,6 +102,17 @@ public class Gameboard extends Application {
             alert.setContentText("You rescued the princess!");
             alert.showAndWait();
             return;
+        }
+
+        // Bomb condition
+        if (matrix[newRow][newCol] == CellType.BOMB) {
+            lives--;
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Boom");
+            alert.setHeaderText(null);
+            alert.setContentText("You hit a bomb! Lives left: " + lives);
+            alert.showAndWait();
+            matrix[newRow][newCol] = CellType.GRASS;
         }
 
         // Move the player
